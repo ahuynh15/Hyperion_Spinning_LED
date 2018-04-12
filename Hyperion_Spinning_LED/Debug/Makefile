@@ -60,7 +60,8 @@ C_SRCS +=  \
 ../src/main.c
 
 
-PREPROCESSING_SRCS += 
+PREPROCESSING_SRCS +=  \
+../src/Assembly1.s
 
 
 ASM_SRCS += 
@@ -68,18 +69,22 @@ ASM_SRCS +=
 
 OBJS +=  \
 src/ASF/mega/boards/atmega328p_xplained_mini/init.o \
+src/Assembly1.o \
 src/main.o
 
 OBJS_AS_ARGS +=  \
 src/ASF/mega/boards/atmega328p_xplained_mini/init.o \
+src/Assembly1.o \
 src/main.o
 
 C_DEPS +=  \
 src/ASF/mega/boards/atmega328p_xplained_mini/init.d \
+src/Assembly1.d \
 src/main.d
 
 C_DEPS_AS_ARGS +=  \
 src/ASF/mega/boards/atmega328p_xplained_mini/init.d \
+src/Assembly1.d \
 src/main.d
 
 OUTPUT_FILE_PATH +=Hyperion_Spinning_LED.elf
@@ -122,6 +127,20 @@ src/%.o: ../src/%.c
 
 
 # AVR32/GNU Assembler
+src/Assembly1.o: ../src/Assembly1.s
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU Assembler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -Wa,-gdwarf2 -x assembler-with-cpp -c -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328p" -mrelax -DBOARD=ATMEGA328P_XPLAINED_MINI -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I "../src/ASF/common/boards" -I "../src/ASF/mega/utils/preprocessor" -I "../src/ASF/mega/utils" -I "../src/ASF/common/utils" -I "../src/ASF/mega/boards" -I "../src/ASF/mega/boards/atmega328p_xplained_mini" -I "../src/ASF/common/services/gpio" -I "../src/ASF/common/services/ioport" -I "../src" -I "../src/config"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+
+src/%.o: ../src/%.s
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU Assembler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE) -Wa,-gdwarf2 -x assembler-with-cpp -c -mmcu=atmega328p -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\gcc\dev\atmega328p" -mrelax -DBOARD=ATMEGA328P_XPLAINED_MINI -I "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.2.150\include" -I "../src/ASF/common/boards" -I "../src/ASF/mega/utils/preprocessor" -I "../src/ASF/mega/utils" -I "../src/ASF/common/utils" -I "../src/ASF/mega/boards" -I "../src/ASF/mega/boards/atmega328p_xplained_mini" -I "../src/ASF/common/services/gpio" -I "../src/ASF/common/services/ioport" -I "../src" -I "../src/config"  -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)" -Wa,-g   -o "$@" "$<" 
+	@echo Finished building: $<
+	
 
 
 

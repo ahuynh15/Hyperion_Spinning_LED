@@ -1,6 +1,11 @@
 #include <asf.h>
 // Delay Library
 #include <util/delay.h>
+#include <avr/eeprom.h>
+
+unsigned char ASCII;
+
+void UART_Get(void);
 
 /*
 1. Allow the user to specify the length of the input and provide characters
@@ -536,16 +541,34 @@ void displayCharacter (char character) {
 	}
 }
 
+void get_input(char * text, int length){
+	for(int i = 0; i < length; i++){
+		ASCII = '\0';
+		while(ASCII == '\0'){
+			UART_Get();
+		}
+		text[i] = ASCII;
+	}
+	eeprom_write_block((const void *)&text, (void *)0, length);
+	return;
+}
+
 int main (void)
 {
+	int TEXT_LENGTH = 5;
+	char TEXT[TEXT_LENGTH];
 	//Set all pins on PORT D to output
+	eeprom_read_block((void *)&TEXT, (const void *)0, TEXT_LENGTH);
 	DDRD = 0xFF;
 	board_init();
+	ASCII = '\0';
 	while(1) {
-		displayCharacter('H');
-		displayCharacter('E');
-		displayCharacter('L');
-		displayCharacter('L');
-		displayCharacter('O');
+		UART_Get();
+		if(ASCII != '\0'){
+			get_input(TEXT, TEXT_LENGTH);
+		}
+		for(int i = 0; i < TEXT_LENGTH; i++){
+			displayCharacter(TEXT[i]);
+		}
 	}
 }

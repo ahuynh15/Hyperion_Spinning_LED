@@ -4,5 +4,7 @@
 
 src\ASF\mega\boards\atmega328p_xplained_mini\init.c
 
+src\Assembly1.s
+
 src\main.c
 
