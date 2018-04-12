@@ -7,8 +7,11 @@
 2. Loop through the characters and display each letter in the display
 */
 
-// CONSTANTS
-const double DELAY_MS = 100.00;
+// Variables
+char[] message = ""; // This variable will store the message that will be displayed
+
+// Constants
+const double DELAY_MS = 100.00; // Adjust this variable to adjust the delay between each frame
 
 // Delays the program if needed
 void delay () {
@@ -16,11 +19,13 @@ void delay () {
 }
 
 // Displays the character with the LED
+// For each "frame", change the LEDs to the new pattern
+// Each frame is given in hex
 void displayCharacter (char character) {
+	
+	//Look for the pattern for the character the user wants to display
 	switch (character)
 	{
-		//F0 F1 F2 F3 F4 - Frame Order (given in hex)
-
 		case 'A':
 		//1F 24 44 24 1F
 		PORTD = 0x1F;
@@ -534,6 +539,11 @@ void displayCharacter (char character) {
 		delay();
 		break;
 	}
+
+	// Add an empty frame to seperate letters from each other
+	PORTD = 0x00;
+	delay();
+
 }
 
 int main (void)
