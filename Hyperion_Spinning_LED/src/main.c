@@ -25,7 +25,7 @@ void USART_putstring(char* StringPtr);
 */
 
 // Constants
-const double DELAY_MS = 1000.00; // Adjust this variable to adjust the delay between each frame
+const double DELAY_MS = 1.00; // Adjust this variable to adjust the delay between each frame
 
 int main (void)
 {
@@ -34,7 +34,7 @@ int main (void)
 	//Set all pins on PORT D to output
 	DDRD = 0xFF;
 
-	eeprom_read_block((void *)&TEXT, (const void *)0, TEXT_LENGTH);
+	eeprom_read_block((void *)&TEXT, (const void *)0, TEXT_LENGTH); //reads the eeprom on load
 
 	//Initialize the board
 	board_init();
@@ -42,10 +42,16 @@ int main (void)
 	USART_init();
 	ASCII = '\0';
 	while(1) {
-		USART_putstring("HELLO WORLD!!!");
-		if(ASCII != '\0'){
-			get_input(TEXT, TEXT_LENGTH);
-		}
+ 		ASCII = USART_receive();
+ 		if(ASCII == '`'){
+ 			USART_putstring("Type 5 characters\n");
+ 			get_input(TEXT, TEXT_LENGTH);
+			USART_putstring("\n\rWord set to ");
+			for(int i = 0; i < TEXT_LENGTH; i++){
+				USART_send(TEXT[i]); // putstring didn't like char arrays
+			}
+			USART_putstring("\n\r");
+ 		}
 		for(int i = 0; i < TEXT_LENGTH; i++){
 			displayCharacter(TEXT[i]);
 		}
@@ -61,7 +67,9 @@ void delay () {
 // For each "frame", change the LEDs to the new pattern
 // Each frame is given in hex
 void displayCharacter (char character) {
-	
+	//debug code
+	//USART_send(character);
+	//USART_putstring("\n\r");
 	//Look for the pattern for the character the user wants to display
 	switch (character)
 	{
@@ -588,12 +596,13 @@ void displayCharacter (char character) {
 void get_input(char * text, int length){
 	for(int i = 0; i < length; i++){
 		ASCII = '\0';
-		while(ASCII == '\0'){
-			UART_Get();
+		while(ASCII == '\0' || ASCII == '`'){
+			ASCII = USART_receive();
 		}
 		text[i] = ASCII;
+		USART_send(ASCII);
+		eeprom_write_byte((uint8_t *)i, ASCII);
 	}
-	eeprom_write_block((const void *)&text, (void *)0, length);
 	return;
 }
 
@@ -606,23 +615,20 @@ void USART_init(void){
 }
 
 unsigned char USART_receive(void){
-	
-	while(!(UCSR0A & (1<<RXC0)));
-	return UDR0;
-	
+	if((UCSR0A & (1<<RXC0))){
+		return UDR0;
+	}
+	return '\0';
 }
 
-void USART_send( unsigned char data){
-	
+void USART_send(unsigned char data){
 	while(!(UCSR0A & (1<<UDRE0)));
 	UDR0 = data;
-	
 }
 
 void USART_putstring(char* StringPtr){
-	
 	while(*StringPtr != 0x00){
 		USART_send(*StringPtr);
-	StringPtr++;}
-	
+		StringPtr++;
+	}
 }
