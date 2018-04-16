@@ -1,10 +1,10 @@
 #define F_CPU 16000000UL
+#define BAUDRATE 9600
+#define BAUD_PRESCALLER (((F_CPU / (BAUDRATE * 16UL))) - 1)
 #include <asf.h>
 // Delay Library
 #include <util/delay.h>
 #include <avr/eeprom.h>
-
-
 
 unsigned char ASCII;
 
@@ -13,6 +13,12 @@ void delay(void);
 void displayCharacter(char);
 void get_input(char*, int);
 
+//USART Functions
+void USART_init(void);
+unsigned char USART_receive(void);
+void USART_send( unsigned char data);
+void USART_putstring(char* StringPtr);
+
 /*
 1. Allow the user to specify the length of the input and provide characters
 2. Loop through the characters and display each letter in the display
@@ -20,6 +26,31 @@ void get_input(char*, int);
 
 // Constants
 const double DELAY_MS = 1000.00; // Adjust this variable to adjust the delay between each frame
+
+int main (void)
+{
+	int TEXT_LENGTH = 5;
+	char TEXT[TEXT_LENGTH];
+	//Set all pins on PORT D to output
+	DDRD = 0xFF;
+
+	eeprom_read_block((void *)&TEXT, (const void *)0, TEXT_LENGTH);
+
+	//Initialize the board
+	board_init();
+	//Initialize the USART
+	USART_init();
+	ASCII = '\0';
+	while(1) {
+		USART_putstring("HELLO WORLD!!!");
+		if(ASCII != '\0'){
+			get_input(TEXT, TEXT_LENGTH);
+		}
+		for(int i = 0; i < TEXT_LENGTH; i++){
+			displayCharacter(TEXT[i]);
+		}
+	}
+}
 
 // Delays the program if needed
 void delay () {
@@ -566,25 +597,32 @@ void get_input(char * text, int length){
 	return;
 }
 
-int main (void)
-{
-	int TEXT_LENGTH = 5;
-	char TEXT[TEXT_LENGTH];
-	//Set all pins on PORT D to output
-	DDRD = 0xFF;
+void USART_init(void){
+	
+	UBRR0H = (uint8_t)(BAUD_PRESCALLER>>8);
+	UBRR0L = (uint8_t)(BAUD_PRESCALLER);
+	UCSR0B = (1<<RXEN0)|(1<<TXEN0);
+	UCSR0C = (3<<UCSZ00);
+}
 
-	eeprom_read_block((void *)&TEXT, (const void *)0, TEXT_LENGTH);
+unsigned char USART_receive(void){
+	
+	while(!(UCSR0A & (1<<RXC0)));
+	return UDR0;
+	
+}
 
-	//Initialize the board
-	board_init();
-	ASCII = '\0';
-	while(1) {
-		UART_Get();
-		if(ASCII != '\0'){
-			get_input(TEXT, TEXT_LENGTH);
-		}
-		for(int i = 0; i < TEXT_LENGTH; i++){
-			displayCharacter(TEXT[i]);
-		}
-	}
+void USART_send( unsigned char data){
+	
+	while(!(UCSR0A & (1<<UDRE0)));
+	UDR0 = data;
+	
+}
+
+void USART_putstring(char* StringPtr){
+	
+	while(*StringPtr != 0x00){
+		USART_send(*StringPtr);
+	StringPtr++;}
+	
 }

@@ -1,5 +1,6 @@
-src/main.d src/main.o: ../src/main.c ../src/asf.h \
- ../src/ASF/mega/drivers/cpu/mega_reset_cause.h \
+src/ASF/common/services/clock/mega/sysclk.d \
+ src/ASF/common/services/clock/mega/sysclk.o: \
+ ../src/ASF/common/services/clock/mega/sysclk.c \
  ../src/ASF/mega/utils/compiler.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\io.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\sfr_defs.h \
@@ -20,25 +21,15 @@ src/main.d src/main.o: ../src/main.c ../src/asf.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\interrupt.h \
  ../src/ASF/mega/utils/progmem.h \
  c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h \
- ../src/ASF/common/services/gpio/gpio.h \
- ../src/ASF/common/services/gpio/mega_gpio/mega_gpio.h \
- ../src/ASF/common/services/ioport/ioport.h \
- ../src/ASF/common/services/ioport/mega/ioport.h \
+ ../src/ASF/common/services/clock/sysclk.h ../src/config/conf_clock.h \
+ ../src/ASF/common/services/clock/mega/sysclk.h \
  ../src/ASF/common/boards/board.h \
  ../src/ASF/mega/boards/atmega328p_xplained_mini/atmega328p_xplained_mini.h \
  ../src/ASF/mega/boards/atmega328p_xplained_mini/led.h \
- ../src/ASF/mega/utils/status_codes.h \
- ../src/ASF/common/services/clock/sysclk.h ../src/config/conf_clock.h \
- ../src/ASF/common/services/clock/mega/sysclk.h \
- ../src/ASF/mega/drivers/usart/usart_mega.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h \
- c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\eeprom.h
-
-../src/asf.h:
-
-../src/ASF/mega/drivers/cpu/mega_reset_cause.h:
+ ../src/ASF/common/services/gpio/gpio.h \
+ ../src/ASF/common/services/gpio/mega_gpio/mega_gpio.h \
+ ../src/ASF/common/services/ioport/ioport.h \
+ ../src/ASF/common/services/ioport/mega/ioport.h
 
 ../src/ASF/mega/utils/compiler.h:
 
@@ -82,13 +73,11 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\pgmspace.h:
 
-../src/ASF/common/services/gpio/gpio.h:
+../src/ASF/common/services/clock/sysclk.h:
 
-../src/ASF/common/services/gpio/mega_gpio/mega_gpio.h:
+../src/config/conf_clock.h:
 
-../src/ASF/common/services/ioport/ioport.h:
-
-../src/ASF/common/services/ioport/mega/ioport.h:
+../src/ASF/common/services/clock/mega/sysclk.h:
 
 ../src/ASF/common/boards/board.h:
 
@@ -96,20 +85,10 @@ c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\
 
 ../src/ASF/mega/boards/atmega328p_xplained_mini/led.h:
 
-../src/ASF/mega/utils/status_codes.h:
+../src/ASF/common/services/gpio/gpio.h:
 
-../src/ASF/common/services/clock/sysclk.h:
+../src/ASF/common/services/gpio/mega_gpio/mega_gpio.h:
 
-../src/config/conf_clock.h:
+../src/ASF/common/services/ioport/ioport.h:
 
-../src/ASF/common/services/clock/mega/sysclk.h:
-
-../src/ASF/mega/drivers/usart/usart_mega.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\util\delay_basic.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\math.h:
-
-c:\program\ files\ (x86)\atmel\studio\7.0\toolchain\avr8\avr8-gnu-toolchain\avr\include\avr\eeprom.h:
+../src/ASF/common/services/ioport/mega/ioport.h:
