@@ -31,7 +31,7 @@ int main (void)
 {
 	int TEXT_LENGTH = 5;
 	char TEXT[TEXT_LENGTH];
-	//Set all pins on PORT D to output
+	//Set all pins on PORT B and C to output
 	DDRB = 0b00111111;
 	DDRC = 0b00000001;
 
@@ -79,7 +79,7 @@ void displayCharacter (char character) {
 
 	switch (character)
 	{
-		case 'A':
+		case 'A' | 'a':
 			//1F 24 44 24 1F
 			frames[0] = 0x1F;
 			frames[1] = 0x24;
@@ -87,7 +87,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x24;
 			frames[4] = 0x1F;
 			break;
-		case 'B':
+		case 'B' | 'b':
 			//7F 49 49 49 36
 			frames[0] = 0x7F;
 			frames[1] = 0x49;
@@ -95,7 +95,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x49;
 			frames[4] = 0x36;
 			break;
-		case 'C':
+		case 'C' | 'c':
 			//3E 41 41 41 22
 			frames[0] = 0x3E;
 			frames[1] = 0x41;
@@ -103,7 +103,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x41;
 			frames[4] = 0x22;
 			break;
-		case 'D':
+		case 'D' | 'd':
 			//7F 41 41 41 3E
 			frames[0] = 0x7F;
 			frames[1] = 0x41;
@@ -111,7 +111,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x41;
 			frames[4] = 0x3E;
 			break;
-		case 'E':
+		case 'E' | 'e':
 			//7F 49 49 49 49
 			frames[0] = 0x7F;
 			frames[1] = 0x49;
@@ -119,7 +119,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x49;
 			frames[4] = 0x49;
 			break;
-		case 'F':
+		case 'F' | 'f':
 			//7F 48 48 48 48
 			frames[0] = 0x7F;
 			frames[1] = 0x48;
@@ -127,7 +127,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x48;
 			frames[4] = 0x48;
 			break;
-		case 'G':
+		case 'G' | 'g':
 			//3E 41 49 49 2E
 			frames[0] = 0x3E;
 			frames[1] = 0x41;
@@ -135,7 +135,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x49;
 			frames[4] = 0x2E;
 			break;
-		case 'H':
+		case 'H' | 'h':
 			//7F 08 08 08 7F
 			frames[0] = 0x7F;
 			frames[1] = 0x08;
@@ -143,7 +143,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x08;
 			frames[4] = 0x7F;
 			break;
-		case 'I':
+		case 'I' | 'i':
 			//41 41 7F 41 41
 			frames[0] = 0x41;
 			frames[1] = 0x41;
@@ -151,7 +151,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x41;
 			frames[4] = 0x41;
 			break;
-		case 'J':
+		case 'J' | 'j':
 			//02 01 01 01 7E
 			frames[0] = 0x02;
 			frames[1] = 0x01;
@@ -159,14 +159,14 @@ void displayCharacter (char character) {
 			frames[3] = 0x01;
 			frames[4] = 0x7E;
 			break;
-		case 'K':
+		case 'K' | 'k':
 			//7F 08 14 22 41
 			frames[0] = 0x7F;
 			frames[1] = 0x08;
 			frames[2] = 0x14;
 			frames[3] = 0x22;
 			frames[4] = 0x41;
-		case 'L':
+		case 'L' | 'l':
 			//7F 01 01 01 01
 			frames[0] = 0x7F;
 			frames[1] = 0x01;
@@ -174,7 +174,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x01;
 			frames[4] = 0x01;
 			break;
-		case 'M':
+		case 'M' | 'm':
 			//7F 20 18 20 7F
 			frames[0] = 0x7F;
 			frames[1] = 0x20;
@@ -182,7 +182,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x20;
 			frames[4] = 0x7F;
 			break;
-		case 'N':
+		case 'N' | 'n':
 			//7F 10 08 04 7F
 			frames[0] = 0x7F;
 			frames[1] = 0x10;
@@ -190,7 +190,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x04;
 			frames[4] = 0x7F;
 			break;
-		case 'O':
+		case 'O' | 'o':
 			//3E 41 41 41 3E
 			frames[0] = 0x3E;
 			frames[1] = 0x41;
@@ -198,7 +198,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x41;
 			frames[4] = 0x3E;
 			break;
-		case 'P':
+		case 'P' | 'p':
 			//7F 48 48 48 30
 			frames[0] = 0x7F;
 			frames[1] = 0x48;
@@ -206,7 +206,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x48;
 			frames[4] = 0x30;
 			break;
-		case 'Q':
+		case 'Q' | 'q':
 			//3E 41 45 43 3F
 			frames[0] = 0x3E;
 			frames[1] = 0x41;
@@ -214,7 +214,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x43;
 			frames[4] = 0x3F;
 			break;
-		case 'R':
+		case 'R' | 'r':
 			//7F 48 48 48 37
 			frames[0] = 0x7F;
 			frames[1] = 0x48;
@@ -222,7 +222,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x48;
 			frames[4] = 0x37;
 			break;
-		case 'S':
+		case 'S' | 's':
 			//31 49 49 49 46
 			frames[0] = 0x31;
 			frames[1] = 0x49;
@@ -230,7 +230,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x49;
 			frames[4] = 0x46;
 			break;
-		case 'T':
+		case 'T' | 't':
 			//40 40 7F 40 40
 			frames[0] = 0x40;
 			frames[1] = 0x40;
@@ -238,7 +238,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x40;
 			frames[4] = 0x40;
 			break;
-		case 'U':
+		case 'U' | 'u':
 			//7E 01 01 01 7E
 			frames[0] = 0x7E;
 			frames[1] = 0x01;
@@ -246,7 +246,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x01;
 			frames[4] = 0x7E;
 			break;
-		case 'V':
+		case 'V' | 'v':
 			//7C 02 01 02 7C
 			frames[0] = 0x7C;
 			frames[1] = 0x02;
@@ -254,7 +254,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x02;
 			frames[4] = 0x7C;
 			break;
-		case 'W':
+		case 'W' | 'w':
 			//7F 02 0C 02 7F
 			frames[0] = 0x7F;
 			frames[1] = 0x02;
@@ -262,7 +262,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x02;
 			frames[4] = 0x7F;
 			break;
-		case 'X':
+		case 'X' | 'x':
 			//63 14 08 14 63
 			frames[0] = 0x63;
 			frames[1] = 0x14;
@@ -270,7 +270,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x14;
 			frames[4] = 0x63;
 			break;
-		case 'Y':
+		case 'Y' | 'y':
 			//60 18 07 18 60
 			frames[0] = 0x60;
 			frames[1] = 0x18;
@@ -278,7 +278,7 @@ void displayCharacter (char character) {
 			frames[3] = 0x18;
 			frames[4] = 0x60;
 			break;
-		case 'Z':
+		case 'Z' | 'z':
 			//43 45 49 51 61
 			frames[0] = 0x43;
 			frames[1] = 0x45;
@@ -399,7 +399,7 @@ void displayCharacter (char character) {
 	}
 
 
-	//Go through each of the frames
+	//Go through each of the frames and output them on the ports
 	for(int i = 0; i < numFrames; i++) {
 		currentFrameValue = frames[i];
 		//No shift is needed for the PORTB
