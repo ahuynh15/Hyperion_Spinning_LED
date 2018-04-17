@@ -25,14 +25,15 @@ void USART_putstring(char* StringPtr);
 */
 
 // Constants
-const double DELAY_MS = 1.00; // Adjust this variable to adjust the delay between each frame
+const double DELAY_MS = 10.00; // Adjust this variable to adjust the delay between each frame
 
 int main (void)
 {
 	int TEXT_LENGTH = 5;
 	char TEXT[TEXT_LENGTH];
 	//Set all pins on PORT D to output
-	DDRD = 0xFF;
+	DDRB = 0b00111111;
+	DDRC = 0b00000001;
 
 	eeprom_read_block((void *)&TEXT, (const void *)0, TEXT_LENGTH); //reads the eeprom on load
 
@@ -71,524 +72,346 @@ void displayCharacter (char character) {
 	//USART_send(character);
 	//USART_putstring("\n\r");
 	//Look for the pattern for the character the user wants to display
+
+	unsigned int numFrames = 5;
+	unsigned int currentFrameValue = 0;
+	unsigned int frames[5] = {0x00,0x00,0x00,0x00,0x00}; 
+
 	switch (character)
 	{
 		case 'A':
 			//1F 24 44 24 1F
-			PORTD = 0x1F;
-			delay();
-			PORTD = 0x24;
-			delay();
-			PORTD = 0x44;
-			delay();
-			PORTD = 0x24;
-			delay();
-			PORTD = 0x1F;
-			delay();
+			frames[0] = 0x1F;
+			frames[1] = 0x24;
+			frames[2] = 0x44;
+			frames[3] = 0x24;
+			frames[4] = 0x1F;
 			break;
 		case 'B':
 			//7F 49 49 49 36
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x36;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x49;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x36;
 			break;
 		case 'C':
 			//3E 41 41 41 22
-			PORTD = 0x3E;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x22;
-			delay();
+			frames[0] = 0x3E;
+			frames[1] = 0x41;
+			frames[2] = 0x41;
+			frames[3] = 0x41;
+			frames[4] = 0x22;
 			break;
 		case 'D':
 			//7F 41 41 41 3E
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x3E;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x41;
+			frames[2] = 0x41;
+			frames[3] = 0x41;
+			frames[4] = 0x3E;
 			break;
 		case 'E':
 			//7F 49 49 49 49
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x49;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x49;
 			break;
 		case 'F':
 			//7F 48 48 48 48
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x48;
+			frames[2] = 0x48;
+			frames[3] = 0x48;
+			frames[4] = 0x48;
 			break;
 		case 'G':
 			//3E 41 49 49 2E
-			PORTD = 0x3E;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x2E;
-			delay();
+			frames[0] = 0x3E;
+			frames[1] = 0x41;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x2E;
 			break;
 		case 'H':
 			//7F 08 08 08 7F
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x7F;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x08;
+			frames[2] = 0x08;
+			frames[3] = 0x08;
+			frames[4] = 0x7F;
 			break;
 		case 'I':
 			//41 41 7F 41 41
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
+			frames[0] = 0x41;
+			frames[1] = 0x41;
+			frames[2] = 0x7F;
+			frames[3] = 0x41;
+			frames[4] = 0x41;
 			break;
 		case 'J':
 			//02 01 01 01 7E
-			PORTD = 0x02;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x7E;
-			delay();
+			frames[0] = 0x02;
+			frames[1] = 0x01;
+			frames[2] = 0x01;
+			frames[3] = 0x01;
+			frames[4] = 0x7E;
 			break;
 		case 'K':
 			//7F 08 14 22 41
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x14;
-			delay();
-			PORTD = 0x22;
-			delay();
-			PORTD = 0x41;
-			delay();
-			break;
+			frames[0] = 0x7F;
+			frames[1] = 0x08;
+			frames[2] = 0x14;
+			frames[3] = 0x22;
+			frames[4] = 0x41;
 		case 'L':
 			//7F 01 01 01 01
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x01;
+			frames[2] = 0x01;
+			frames[3] = 0x01;
+			frames[4] = 0x01;
 			break;
 		case 'M':
 			//7F 20 18 20 7F
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x20;
-			delay();
-			PORTD = 0x18;
-			delay();
-			PORTD = 0x20;
-			delay();
-			PORTD = 0x7F;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x20;
+			frames[2] = 0x18;
+			frames[3] = 0x20;
+			frames[4] = 0x7F;
 			break;
 		case 'N':
 			//7F 10 08 04 7F
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x10;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x04;
-			delay();
-			PORTD = 0x7F;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x10;
+			frames[2] = 0x08;
+			frames[3] = 0x04;
+			frames[4] = 0x7F;
 			break;
 		case 'O':
 			//3E 41 41 41 3E
-			PORTD = 0x3E;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x3E;
-			delay();
+			frames[0] = 0x3E;
+			frames[1] = 0x41;
+			frames[2] = 0x41;
+			frames[3] = 0x41;
+			frames[4] = 0x3E;
 			break;
 		case 'P':
 			//7F 48 48 48 30
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x30;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x48;
+			frames[2] = 0x48;
+			frames[3] = 0x48;
+			frames[4] = 0x30;
 			break;
 		case 'Q':
 			//3E 41 45 43 3F
-			PORTD = 0x3E;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x45;
-			delay();
-			PORTD = 0x43;
-			delay();
-			PORTD = 0x3F;
-			delay();
+			frames[0] = 0x3E;
+			frames[1] = 0x41;
+			frames[2] = 0x45;
+			frames[3] = 0x43;
+			frames[4] = 0x3F;
 			break;
 		case 'R':
 			//7F 48 48 48 37
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x37;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x48;
+			frames[2] = 0x48;
+			frames[3] = 0x48;
+			frames[4] = 0x37;
 			break;
 		case 'S':
 			//31 49 49 49 46
-			PORTD = 0x31;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x46;
-			delay();
+			frames[0] = 0x31;
+			frames[1] = 0x49;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x46;
 			break;
 		case 'T':
 			//40 40 7F 40 40
-			PORTD = 0x40;
-			delay();
-			PORTD = 0x40;
-			delay();
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x40;
-			delay();
-			PORTD = 0x40;
-			delay();
+			frames[0] = 0x40;
+			frames[1] = 0x40;
+			frames[2] = 0x7F;
+			frames[3] = 0x40;
+			frames[4] = 0x40;
 			break;
 		case 'U':
 			//7E 01 01 01 7E
-			PORTD = 0x7E;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x7E;
-			delay();
+			frames[0] = 0x7E;
+			frames[1] = 0x01;
+			frames[2] = 0x01;
+			frames[3] = 0x01;
+			frames[4] = 0x7E;
 			break;
 		case 'V':
 			//7C 02 01 02 7C
-			PORTD = 0x7C;
-			delay();
-			PORTD = 0x02;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x02;
-			delay();
-			PORTD = 0x7C;
-			delay();
+			frames[0] = 0x7C;
+			frames[1] = 0x02;
+			frames[2] = 0x01;
+			frames[3] = 0x02;
+			frames[4] = 0x7C;
 			break;
 		case 'W':
 			//7F 02 0C 02 7F
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x02;
-			delay();
-			PORTD = 0x0C;
-			delay();
-			PORTD = 0x02;
-			delay();
-			PORTD = 0x7F;
-			delay();
+			frames[0] = 0x7F;
+			frames[1] = 0x02;
+			frames[2] = 0x0C;
+			frames[3] = 0x02;
+			frames[4] = 0x7F;
 			break;
 		case 'X':
 			//63 14 08 14 63
-			PORTD = 0x63;
-			delay();
-			PORTD = 0x14;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x14;
-			delay();
-			PORTD = 0x63;
-			delay();
+			frames[0] = 0x63;
+			frames[1] = 0x14;
+			frames[2] = 0x08;
+			frames[3] = 0x14;
+			frames[4] = 0x63;
 			break;
 		case 'Y':
 			//60 18 07 18 60
-			PORTD = 0x60;
-			delay();
-			PORTD = 0x18;
-			delay();
-			PORTD = 0x07;
-			delay();
-			PORTD = 0x18;
-			delay();
-			PORTD = 0x60;
-			delay();
+			frames[0] = 0x60;
+			frames[1] = 0x18;
+			frames[2] = 0x07;
+			frames[3] = 0x18;
+			frames[4] = 0x60;
 			break;
 		case 'Z':
 			//43 45 49 51 61
-			PORTD = 0x43;
-			delay();
-			PORTD = 0x45;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x51;
-			delay();
-			PORTD = 0x61;
-			delay();
+			frames[0] = 0x43;
+			frames[1] = 0x45;
+			frames[2] = 0x49;
+			frames[3] = 0x51;
+			frames[4] = 0x61;
 			break;
 		case ' ':
 			//00 00 00 00 00
-			PORTD = 0x00;
-			delay();
-			PORTD = 0x00;
-			delay();
-			PORTD = 0x00;
-			delay();
-			PORTD = 0x00;
-			delay();
-			PORTD = 0x00;
-			delay();
+			frames[0] = 0x00;
+			frames[1] = 0x00;
+			frames[2] = 0x00;
+			frames[3] = 0x00;
+			frames[4] = 0x00;
 			break;
 		case '.':
 			//00 01 00 - Special Case (3 frames)
-			PORTD = 0x00;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x00;
-			delay();
+			frames[0] = 0x00;
+			frames[1] = 0x01;
+			frames[2] = 0x00;
+			numFrames = 3;
 			break;
 		case '?':
 			//30 40 45 48 30
-			PORTD = 0x30;
-			delay();
-			PORTD = 0x40;
-			delay();
-			PORTD = 0x45;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x30;
-			delay();
+			frames[0] = 0x30;
+			frames[1] = 0x40;
+			frames[2] = 0x45;
+			frames[3] = 0x48;
+			frames[4] = 0x30;
 			break;
 		case '!':
 			//00 7D 00 - Special Case (3 frames)
-			PORTD = 0x00;
-			delay();
-			PORTD = 0x7D;
-			delay();
-			PORTD = 0x00;
-			delay();
+			frames[0] = 0x00;
+			frames[1] = 0x7D;
+			frames[2] = 0x00;
+			numFrames = 3;
 			break;
 		case '0':
 			//3E 41 41 41 3E
-			PORTD = 0x3E;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x3E;
-			delay();
+			frames[0] = 0x3E;
+			frames[1] = 0x41;
+			frames[2] = 0x41;
+			frames[3] = 0x41;
+			frames[4] = 0x3E;
 			break;
 		case '1':
 			//11 21 7F 01 01
-			PORTD = 0x11;
-			delay();
-			PORTD = 0x21;
-			delay();
-			PORTD = 0x7F;
-			delay();
-			PORTD = 0x01;
-			delay();
-			PORTD = 0x01;
-			delay();
+			frames[0] = 0x11;
+			frames[1] = 0x21;
+			frames[2] = 0x7F;
+			frames[3] = 0x01;
+			frames[4] = 0x01;
 			break;
 		case '2':
 			//31 43 45 49 31
-			PORTD = 0x31;
-			delay();
-			PORTD = 0x43;
-			delay();
-			PORTD = 0x45;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x31;
-			delay();
+			frames[0] = 0x31;
+			frames[1] = 0x43;
+			frames[2] = 0x45;
+			frames[3] = 0x49;
+			frames[4] = 0x31;
 			break;
 		case '3':
 			//22 49 49 49 36
-			PORTD = 0x22;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x36;
-			delay();
+			frames[0] = 0x22;
+			frames[1] = 0x49;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x36;
 			break;
 		case '4':
 			//78 08 08 08 7F
-			PORTD = 0x78;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x08;
-			delay();
-			PORTD = 0x7F;
-			delay();
+			frames[0] = 0x78;
+			frames[1] = 0x08;
+			frames[2] = 0x08;
+			frames[3] = 0x08;
+			frames[4] = 0x7F;
 			break;
 		case '5':
 			//79 49 49 49 46
-			PORTD = 0x79;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x46;
-			delay();
+			frames[0] = 0x79;
+			frames[1] = 0x49;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x46;
 			break;
 		case '6':
 			//3E 49 49 49 26
-			PORTD = 0x3E;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x26;
-			delay();
+			frames[0] = 0x3E;
+			frames[1] = 0x49;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x26;
 			break;
 		case '7':
 			//41 42 44 48 70
-			PORTD = 0x41;
-			delay();
-			PORTD = 0x42;
-			delay();
-			PORTD = 0x44;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x70;
-			delay();
+			frames[0] = 0x41;
+			frames[1] = 0x42;
+			frames[2] = 0x44;
+			frames[3] = 0x48;
+			frames[4] = 0x70;
 			break;
 		case '8':
 			//36 49 49 49 36
-			PORTD = 0x36;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x49;
-			delay();
-			PORTD = 0x36;
-			delay();
+			frames[0] = 0x36;
+			frames[1] = 0x49;
+			frames[2] = 0x49;
+			frames[3] = 0x49;
+			frames[4] = 0x36;
 			break;
 		case '9':
 			//30 48 48 48 3F
-			PORTD = 0x30;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x48;
-			delay();
-			PORTD = 0x3F;
-			delay();
+			frames[0] = 0x30;
+			frames[1] = 0x48;
+			frames[2] = 0x48;
+			frames[3] = 0x48;
+			frames[4] = 0x3F;
 			break;
 	}
 
+
+	//Go through each of the frames
+	for(int i = 0; i < numFrames; i++) {
+		currentFrameValue = frames[i];
+		//No shift is needed for the PORTB
+		PORTB = currentFrameValue;
+		//Shift the binary value to the right by 6 for PORTC
+		PORTC = currentFrameValue >> 6;
+		delay();
+	}
+
 	// Add an empty frame to separate letters from each other
-	PORTD = 0x00;
+	PORTB = 0x00;
+	PORTC = 0x00;
 	delay();
 
 }
