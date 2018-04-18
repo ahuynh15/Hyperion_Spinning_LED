@@ -29,7 +29,7 @@ const double DELAY_MS = 1.00; // Adjust this variable to adjust the delay betwee
 
 int main (void)
 {
-	int TEXT_LENGTH = 5;
+	int TEXT_LENGTH = 10;
 	char TEXT[TEXT_LENGTH];
 	//Set all pins on PORT D to output
 	DDRD = 0xFF;
@@ -44,7 +44,7 @@ int main (void)
 	while(1) {
  		ASCII = USART_receive();
  		if(ASCII == '`'){
- 			USART_putstring("Type 5 characters\n");
+ 			USART_putstring("Type up to 10 characters\n\r\t");
  			get_input(TEXT, TEXT_LENGTH);
 			USART_putstring("\n\rWord set to ");
 			for(int i = 0; i < TEXT_LENGTH; i++){
@@ -53,6 +53,7 @@ int main (void)
 			USART_putstring("\n\r");
  		}
 		for(int i = 0; i < TEXT_LENGTH; i++){
+			if(TEXT[i] == '\0')break;
 			displayCharacter(TEXT[i]);
 		}
 	}
@@ -595,10 +596,14 @@ void displayCharacter (char character) {
 
 void get_input(char * text, int length){
 	for(int i = 0; i < length; i++){
+		text[i] = '\0';
+	}
+	for(int i = 0; i < length; i++){
 		ASCII = '\0';
 		while(ASCII == '\0' || ASCII == '`'){
 			ASCII = USART_receive();
 		}
+		if(ASCII == '\x0D')break;
 		text[i] = ASCII;
 		USART_send(ASCII);
 		eeprom_write_byte((uint8_t *)i, ASCII);
